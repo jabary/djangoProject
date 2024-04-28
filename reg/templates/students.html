@@ -5,7 +5,16 @@
 
 
 <table class="table table-striped">
+<tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Major</th>
+    <th>Average</th>
+    <th>Create Date</th>
+    <th>Delete</th>
+    <th>Update</th>
 
+</tr>
 {% for student in students %}
 <tr>
     <td>{{student.id}}</td>
@@ -13,6 +22,8 @@
     <td>{{student.major}}</td>
     <td>{{student.avg}}</td>
     <td>{{student.create_date}}</td>
+    <td><a href="{% url 'delete' student.pk %}">Delete</a></td>
+    <td><a href="{% url 'update' student.pk %}">Update</a></td>
 </tr>
 
 {% endfor %}
