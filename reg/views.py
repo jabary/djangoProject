@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Student
-from .forms import UserRegistrationForm
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Student, Course, StudentReg
+from .forms import UserRegistrationForm, CourseForm
 from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
@@ -25,7 +25,72 @@ def add_student(request):
     return render(request, 'student_form.html')
 
 
+def add_course(request):
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('courses')  # Redirect to login page after successful registration
+    else:
+        form = CourseForm()
+
+    return render(request, 'course_form.html', {'form': form})
+
+
+
 @login_required
+def courses(request, code=None):
+
+    if code:
+        courses_list = Course.objects.filter(code=code)
+    else:
+        courses_list = Course.objects.all()  # SELECT * FROM students
+
+    return render(request, 'courses.html', {"courses": courses_list})
+
+
+@login_required
+def reg_course(request, code):
+
+    user_id = request.user.id
+    student = Student.objects.get(user_id=user_id)
+    course = Course.objects.get(code=code)
+    student_reg = StudentReg()
+    student_reg.student = student
+    student_reg.course = course
+    student_reg.save()
+
+    return redirect('student_courses')
+
+
+@login_required
+def unreg_course(request, code):
+
+    course = Course.objects.get(code=code)
+
+    StudentReg.objects.filter(course=course).delete()
+
+    return redirect('student_courses')
+
+
+@login_required
+def student_courses(request):
+
+    user_id = request.user.id
+    student = Student.objects.get(user_id=user_id)
+
+    student_reg = StudentReg.objects.filter(student=student)
+
+    courses = [reg.course for reg in student_reg]
+
+    return render(request, 'student_courses.html', {"courses": courses})
+
+
+def user_in_group(user):
+    return user.groups.filter(name='admin').exists()
+
+
+@user_passes_test(user_in_group)
 def students(request, id=None):
 
     user = request.user
@@ -94,6 +159,9 @@ def user_logout(request):
         logout(request)
 
         return redirect('login')
+
+
+
 
 
 

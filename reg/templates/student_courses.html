@@ -1,0 +1,36 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<h2>Welcome {{user.username}}</h2>
+
+
+
+<table class="table table-striped">
+<tr>
+    <th>Code</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Credits</th>
+    <th>Capacity</th>
+    <th>Remove</th>
+
+</tr>
+{% for course in courses %}
+<tr>
+    <td>{{course.code}}</td>
+    <td>{{course.name}}</td>
+    <td>{{course.description}}</td>
+    <td>{{course.credits}}</td>
+    <td>{{course.capacity}}</td>
+    <td><a href="{% url 'unreg_course' course.code %}">Remove</a></td>
+</tr>
+
+{% endfor %}
+</table>
+
+
+
+
+
+
+{% endblock %}

@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'reg'
+    'reg',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -77,9 +78,9 @@ WSGI_APPLICATION = 'testdjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'aws',
+        'NAME': 'registration',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'MySQL8psw',
         'HOST': 'localhost',
         'PORT': '3306',
     }

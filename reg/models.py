@@ -12,5 +12,18 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
 
 
+class Course(models.Model):
+    code = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=300)
+    credits = models.IntegerField()
+    capacity = models.IntegerField()
+
+
+class StudentReg(models.Model):
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
 
 
